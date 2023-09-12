@@ -150,7 +150,7 @@
     - level_1_workstation
     - 1.1.8.3
     - scored
-  when: debian11cis_rules_1_1_16
+  when: debian11cis_rules_1_1_8_3
 - name: 1.1.8.3 Ensure nosuid option set on /dev/shm partition
   mount:
     name: "{{ item.mount }}"
@@ -164,8 +164,9 @@
     - level_1_server
     - level_1_workstation
     - 1.1.8.3
+    - 1.1.8.2
     - scored
-  when: debian11cis_rules_1_1_8_2
+  when: debian11cis_rules_1_1_8_3
 
 # 1.1.9 Disable Automounting
 # autofs allows automatic mounting of devices, typically including CD/DVDs and USB drives.
@@ -415,9 +416,16 @@
 # 1.5.2 Ensure prelink is disabled
 - name: 1.5.2 Ensure prelink is disabled
   block:
+    - name: 1.5.2 Ensure prelink is disabled - check if prelink is installed
+      package:
+        name: prelink
+        state: present
+      check_mode: true
+      register: prelink_check
     - name: 1.5.2 Ensure prelink is disabled - restore
       command: prelink -ua
       ignore_errors: yes
+      when: not prelink_check.changed
     - name: 1.5.2 Ensure prelink is disabled - apt purge
       apt:
         name: prelink
@@ -430,8 +438,8 @@
     - scored
   when: debian11cis_rules_1_5_2
 
-- name: 1.5.3 Ensure Automatic Error Reporting is not enabled
-  # TODO(moshe) Implement this
+# TODO(moshe) Implement this
+#- name: 1.5.3 Ensure Automatic Error Reporting is not enabled
 
 # 1.5.4 Ensure core dumps are restricted
 # A core dump is the memory of an executable program. It is generally used to determine
@@ -493,7 +501,7 @@
     - scored
   when: debian11cis_rules_1_6_1_1
 
-# 1.7.1.2 Ensure AppArmor is enabled in the bootloader configuration
+# 1.6.1.2 Ensure AppArmor is enabled in the bootloader configuration
 # Configure AppArmor to be enabled at boot time and verify that it has not been overwritten
 # by the bootloader boot parameters.
 # Note: This recommendation is designed around the grub bootloader, if LILO or another
@@ -582,6 +590,7 @@
     - 1.7.2
     - scored
   when: debian11cis_rules_1_7_2
+
 # 1.7.3 Ensure remote login warning banner is configured properly
 - name: 1.7.3 Ensure remote login warning banner is configured properly,
     1.7.6 Ensure permissions on /etc/issue.net are configured

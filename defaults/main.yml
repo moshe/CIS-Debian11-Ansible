@@ -68,7 +68,7 @@ debian11cis_rules_1_1_1_2: true
 debian11cis_rules_1_1_1_3: true
 debian11cis_rules_1_1_8_1: true
 debian11cis_rules_1_1_8_2: true
-debian11cis_rules_1_1_16: true
+debian11cis_rules_1_1_8_3: true
 debian11cis_rules_1_1_9: true
 debian11cis_rules_1_1_10: true
 debian11cis_rules_1_2_1: true
