@@ -60,7 +60,7 @@ shell_timeout_sec: 900
 withoutOwnerFileDirOwner: root
 withoutGroupFilesDirGroup: root
 
-# Activate or desactivate rules
+# Activate or deactivate rules
 
 # 1
 debian11cis_rules_1_1_1_1: true
@@ -85,9 +85,11 @@ debian11cis_rules_1_6_1_1: true
 debian11cis_rules_1_6_1_2: true
 debian11cis_rules_1_6_1_3: true
 debian11cis_rules_1_6_1_4: true
+debian11cis_rules_1_7_1: true
 debian11cis_rules_1_7_2: true
 debian11cis_rules_1_7_3: true
 debian11cis_rules_1_7_6: true
+debian11cis_rules_1_8_1: true
 debian11cis_rules_1_9: true
 
 # 2

@@ -26,7 +26,7 @@
     - scored
   when: debian11cis_rules_1_1_1_1
 
-# 1.1.1.5 Ensure mounting of squashfs filesystems is disabled
+# 1.1.1.2 Ensure mounting of squashfs filesystems is disabled
 # The squashfs filesystem type is a compressed read-only Linux filesystem embedded in
 # small footprint systems (similar to cramfs ). A squashfs image can be used without having
 # to first decompress the image.
@@ -54,7 +54,7 @@
     - scored
   when: debian11cis_rules_1_1_1_2
 
-# 1.1.1.6 Ensure mounting of udf filesystems is disabled
+# 1.1.1.3 Ensure mounting of udf filesystems is disabled
 # The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
 # ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
 # broad range of media. This filesystem type is necessary to support writing DVDs and newer
@@ -415,21 +415,9 @@
 
 # 1.5.2 Ensure prelink is disabled
 - name: 1.5.2 Ensure prelink is disabled
-  block:
-    - name: 1.5.2 Ensure prelink is disabled - check if prelink is installed
-      package:
-        name: prelink
-        state: present
-      check_mode: true
-      register: prelink_check
-    - name: 1.5.2 Ensure prelink is disabled - restore
-      command: prelink -ua
-      ignore_errors: yes
-      when: not prelink_check.changed
-    - name: 1.5.2 Ensure prelink is disabled - apt purge
-      apt:
-        name: prelink
-        state: absent
+  apt:
+    name: prelink
+    state: absent
   tags:
     - section1
     - level_1_server
@@ -572,17 +560,14 @@
 # \r - operating system release \s - operating system name \v - operating system version
 - name: 1.7.1 Ensure message of the day is configured properly
   debug:
-    msg: "message of the day implemented in other role"
+    msg: "Ensure that system information is not exposed via motd (\\v|\\s|\\r|\\m)"
+  when: debian11cis_rules_1_7_1
 
 # 1.7.2 Ensure local login warning banner is configured properly
-- name: 1.7.2 Ensure local login warning banner is configured properly,
-    1.7.5 Ensure permissions on /etc/issue are configured
+- name: 1.7.2 Ensure local login warning banner is configured properly
   template:
     src: issue.j2
     dest: /etc/issue
-    owner: root
-    group: root
-    mode: "u-x,go-wx"
   tags:
     - section1
     - level_1_server
@@ -592,25 +577,66 @@
   when: debian11cis_rules_1_7_2
 
 # 1.7.3 Ensure remote login warning banner is configured properly
-- name: 1.7.3 Ensure remote login warning banner is configured properly,
-    1.7.6 Ensure permissions on /etc/issue.net are configured
+- name: 1.7.3 Ensure remote login warning banner is configured properly
   template:
     src: issue.net.j2
     dest: /etc/issue.net
-    owner: root
-    group: root
-    mode: "u-x,go-wx"
   tags:
     - section1
     - level_1_server
     - level_1_workstation
     - 1.7.3
-    - 1.7.6
     - scored
-  when: debian11cis_rules_1_7_3 or
-        debian11cis_rules_1_7_6
+  when: debian11cis_rules_1_7_3
 
 #TODO(moshe) - Add 1.7.4
+
+# 1.7.5 Ensure permissions on /etc/issue are configured
+- name: 1.7.5 Ensure permissions on /etc/issue are configured
+  file:
+    path: /etc/issue
+    owner: root
+    group: root
+    mode: '0644'
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.5
+    - scored
+  when: debian11cis_rules_1_7_5
+
+# 1.7.6 Ensure permissions on /etc/issue.net are configured
+- name: 1.7.6 Ensure permissions on /etc/issue.net are configured
+  file:
+    path: /etc/issue.net
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.6
+    - scored
+  when: debian11cis_rules_1_7_6
+
+# 1.8 GNOME Display Manager
+# The GNOME Display Manager (GDM) is a program that manages graphical display
+# servers and handles graphical user logins.
+# 1.8.1 Ensure GNOME Display Manager is removed
+- name: 1.8.1 Ensure GNOME Display Manager is removed
+  apt:
+    name: gdm3
+    state: absent
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.8.1
+    - manual_setup
+    - scored
+  when: debian11cis_rules_1_8_1
 
 # 1.8.2 Ensure GDM login banner is configured
 - name: 1.8.2 Ensure GDM login banner is configured
@@ -628,6 +654,7 @@
     - 1.8.2
     - manual_setup
     - scored
+  when: debian11cis_rules_1_8_2
 
 # 1.9 Ensure updates, patches, and additional security software are installed
 - name: 1.9 Ensure updates, patches, and additional security software are installed
