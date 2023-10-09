@@ -15,6 +15,7 @@
       modprobe:
         name: cramfs
         state: absent
+      when: ansible_connection != 'chroot'
   tags:
     - section1
     - level_1_server
@@ -43,6 +44,7 @@
       modprobe:
         name: squashfs
         state: absent
+      when: ansible_connection != 'chroot'
   tags:
     - section1
     - level_1_server
@@ -72,6 +74,7 @@
       modprobe:
         name: udf
         state: absent
+      when: ansible_connection != 'chroot'
   tags:
     - section1
     - level_1_server
