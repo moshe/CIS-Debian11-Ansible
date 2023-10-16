@@ -111,7 +111,12 @@
 # 2.1.4.2 Ensure ntp is configured with authorized timeserver
 - name: 2.1.4.2 Ensure ntp is configured with authorized timeserver
   debug:
-    msg: TODO(moshe) - implement
+    msg: |
+      run the following command to display the server and/or
+      pool mode:
+      # grep -P -- '^\h*(server|pool)\h+\H+' /etc/ntp.conf
+      Verify that at least one pool line and/or at least three server lines are returned,
+      and the timeserver on the returned lines follows local site policy
   tags:
     - section2
     - level_1_server
@@ -122,8 +127,10 @@
 
 # 2.1.4.3 Ensure ntp is running as user ntp
 - name: 2.1.4.3 Ensure ntp is running as user ntp
-  debug:
-    msg: TODO(moshe) - implement
+  lineinfile:
+    path: /etc/init.d/ntp
+    regexp: '^RUNASUSER='
+    line: 'RUNASUSER=ntp'
   tags:
     - section2
     - level_1_server
@@ -134,8 +141,10 @@
 
 # 2.1.4.4 Ensure ntp is enabled and running
 - name: 2.1.4.4 Ensure ntp is enabled and running
-  debug:
-    msg: TODO(moshe) - implement
+  systemd:
+    name: ntp
+    state: started
+    enabled: yes
   tags:
     - section2
     - level_1_server
