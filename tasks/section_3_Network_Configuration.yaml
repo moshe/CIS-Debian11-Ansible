@@ -16,7 +16,8 @@
     - level_2_workstation
     - 3.1.1
     - not-scored
-  when: debian10cis_rules_3_1_1
+  when: debian11cis_rules_3_1_1
+
 # 3.1.2 Ensure wireless interfaces are disabled
 # Wireless networking is used when wired networks are unavailable. Debian contains a
 # wireless tool kit to allow system administrators to configure and use wireless networks
@@ -38,7 +39,83 @@
     - level_2_workstation
     - 3.1.2
     - scored
-  when: debian10cis_rules_3_1_2
+  when: debian11cis_rules_3_1_2
+
+# 3.1.3 Ensure DCCP is disabled
+# If the protocol is not required, it is recommended that the drivers not be installed to reduce
+# the potential attack surface.
+- name: 3.1.3 Ensure DCCP is disabled
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install dccp(\\s|$)"
+    line: "install dccp /bin/true"
+    create: true
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.1.3
+    - scored
+  when: debian11cis_rules_3_1_3
+
+# The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to
+# support message oriented communication, with several streams of messages in one
+# connection. It serves a similar function as TCP and UDP, incorporating features of both. It is
+# message-oriented like UDP, and ensures reliable in-sequence transport of messages with
+# congestion control like TCP.
+# If the protocol is not being used, it is recommended that kernel module not be loaded,
+# disabling the service to reduce the potential attack surface.
+- name: 3.1.4 Ensure SCTP is disabled
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install sctp(\\s|$)"
+    line: "install sctp /bin/true"
+    create: true
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.1.4
+    - scored
+  when: debian11cis_rules_3_1_4
+
+# 3.1.5 Ensure RDS is disabled
+# If the protocol is not being used, it is recommended that kernel module not be loaded,
+# disabling the service to reduce the potential attack surface.
+# The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to
+# provide low-latency, high-bandwidth communications between cluster nodes. It was
+# developed by the Oracle Corporation.
+- name: 3.1.5 Ensure RDS is disabled
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install rds(\\s|$)"
+    line: "install rds /bin/true"
+    create: true
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.1.5
+    - scored
+  when: debian11cis_rules_3_1_5
+
+# 3.1.6 Ensure TIPC is disabled
+# The Transparent Inter-Process Communication (TIPC) protocol is designed to provide
+# communication between cluster nodes.
+- name: 3.1.6 Ensure TIPC is disabled
+  lineinfile:
+    dest: /etc/modprobe.d/CIS.conf
+    regexp: "^(#)?install tipc(\\s|$)"
+    line: "install tipc /bin/true"
+    create: true
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.1.6
+    - scored
+  when: debian11cis_rules_3_1_6
+
 # 3.2 Network Parameters (Host Only)
 # 3.2.1 Ensure packet redirect sending is disabled
 # ICMP Redirects are used to send routing information to other hosts. As a host itself does
@@ -62,7 +139,8 @@
     - level_1_workstation
     - 3.2.1
     - scored
-  when: debian10cis_rules_3_2_1
+  when: debian11cis_rules_3_2_1
+
 # 3.2.2 Ensure IP forwarding is disabled
 # Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
 - name: 3.2.2 Ensure IP forwarding is disabled
@@ -101,7 +179,8 @@
     - level_1_workstation
     - 3.2.2
     - scored
-  when: debian10cis_rules_3_2_2
+  when: debian11cis_rules_3_2_2
+
 # 3.3 Network Parameters (Host and Router)
 # 3.3.1 Ensure source routed packets are not accepted
 # Setting net.ipv4.conf.all.accept_source_route,
@@ -152,7 +231,8 @@
     - level_1_workstation
     - 3.3.1
     - scored
-  when: debian10cis_rules_3_3_1
+  when: debian11cis_rules_3_3_1
+
 # 3.3.2 Ensure ICMP redirects are not accepted
 # Attackers could use bogus ICMP redirect messages to maliciously alter the system routing
 # tables and get them to send packets to incorrect networks and allow your system packets
@@ -193,7 +273,8 @@
     - level_1_workstation
     - 3.3.2
     - scored
-  when: debian10cis_rules_3_3_2
+  when: debian11cis_rules_3_3_2
+
 # 3.3.3 Ensure secure ICMP redirects are not accepted
 # It is still possible for even known gateways to be compromised. Setting
 # net.ipv4.conf.all.secure_redirects to 0 protects the system from routing table
@@ -225,7 +306,8 @@
     - level_1_workstation
     - 3.3.3
     - scored
-  when: debian10cis_rules_3_3_3
+  when: debian11cis_rules_3_3_3
+
 # 3.3.4 Ensure suspicious packets are logged
 # Enabling this feature and logging these packets allows an administrator to investigate the
 # possibility that an attacker is sending spoofed packets to their system.
@@ -250,7 +332,8 @@
     - level_1_workstation
     - 3.3.4
     - scored
-  when: debian10cis_rules_3_3_4
+  when: debian11cis_rules_3_3_4
+
 # 3.3.5 Ensure broadcast ICMP requests are ignored
 # Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for
 # your network could be used to trick your host into starting (or participating) in a Smurf
@@ -276,7 +359,8 @@
     - level_1_workstation
     - 3.3.5
     - scored
-  when: debian10cis_rules_3_3_5
+  when: debian11cis_rules_3_3_5
+
 # 3.3.6 Ensure bogus ICMP responses are ignored
 # Some routers (and some attackers) will send responses that violate RFC-1122 and attempt
 # to fill up a log file system with many useless error messages.
@@ -295,7 +379,8 @@
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_3_6
+        debian11cis_rules_3_3_6
+
 # 3.3.7 Ensure Reverse Path Filtering is enabled
 # Setting these flags is a good way to deter attackers from sending your system bogus
 # packets that cannot be responded to. One instance where this feature breaks down is if
@@ -321,7 +406,8 @@
     - level_1_workstation
     - 3.3.7
     - scored
-  when: debian10cis_rules_3_3_7
+  when: debian11cis_rules_3_3_7
+
 # 3.3.8 Ensure TCP SYN Cookies is enabled
 # Attackers use SYN flood attacks to perform a denial of service attacked on a system by
 # sending many SYN packets without completing the three way handshake. This will quickly
@@ -343,7 +429,8 @@
     - level_1_workstation
     - 3.3.8
     - scored
-  when: debian10cis_rules_3_3_8
+  when: debian11cis_rules_3_3_8
+
 # 3.3.9 Ensure IPv6 router advertisements are not accepted
 # It is recommended that systems do not accept router advertisements as they could be
 # tricked into routing traffic to compromised machines. Setting hard routes within the
@@ -368,80 +455,8 @@
     - 3.3.9
     - scored
   when: IPv6_is_enabled and 
-        debian10cis_rules_3_3_9
-# 3.4 Uncommon Network Protocols
-# 3.4.1 Ensure DCCP is disabled
-# If the protocol is not required, it is recommended that the drivers not be installed to reduce
-# the potential attack surface.
-- name: 3.4.1 Ensure DCCP is disabled
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install dccp(\\s|$)"
-    line: "install dccp /bin/true"
-    create: true
-  tags:
-    - section3
-    - level_2_server
-    - level_2_workstation
-    - 3.4.1
-    - scored
-  when: debian10cis_rules_3_4_1
-# 3.4.2 Ensure SCTP is disabled
-# The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to
-# support message oriented communication, with several streams of messages in one
-# connection. It serves a similar function as TCP and UDP, incorporating features of both. It is
-# message-oriented like UDP, and ensures reliable in-sequence transport of messages with
-# congestion control like TCP.
-# If the protocol is not being used, it is recommended that kernel module not be loaded,
-# disabling the service to reduce the potential attack surface.
-- name: 3.4.2 Ensure SCTP is disabled
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install sctp(\\s|$)"
-    line: "install sctp /bin/true"
-    create: true
-  tags:
-    - section3
-    - level_2_server
-    - level_2_workstation
-    - 3.4.2
-    - scored
-  when: debian10cis_rules_3_4_2
-# 3.4.3 Ensure RDS is disabled
-# If the protocol is not being used, it is recommended that kernel module not be loaded,
-# disabling the service to reduce the potential attack surface.
-# The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to
-# provide low-latency, high-bandwidth communications between cluster nodes. It was
-# developed by the Oracle Corporation.
-- name: 3.4.3 Ensure RDS is disabled
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install rds(\\s|$)"
-    line: "install rds /bin/true"
-    create: true
-  tags:
-    - section3
-    - level_2_server
-    - level_2_workstation
-    - 3.4.3
-    - scored
-  when: debian10cis_rules_3_4_3
-# 3.4.4 Ensure TIPC is disabled
-# The Transparent Inter-Process Communication (TIPC) protocol is designed to provide
-# communication between cluster nodes.
-- name: 3.4.4 Ensure TIPC is disabled
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install tipc(\\s|$)"
-    line: "install tipc /bin/true"
-    create: true
-  tags:
-    - section3
-    - level_2_server
-    - level_2_workstation
-    - 3.4.4
-    - scored
-  when: debian10cis_rules_3_4_4
+        debian11cis_rules_3_3_9
+
 # 3.5 Firewall Configuration
 # Only one method should be used to configure a firewall on the system. Use of more
 # than one method could produce unexpected results
@@ -457,25 +472,11 @@
 # configured software on a host.
 # Note: Only one firewall utility should be installed and configured. UFW is dependent on the
 # iptables package
-- name: 3.5.1.1 Ensure a Firewall package is installed
-  block:
-    - name: 3.5.1.1 Ensure a Firewall package is installed - nftables
-      apt:
-        name: nftables
-        state: present
-      when: firewall_type == "nftables"
-    - name: 3.5.1.1 Ensure Uncomplicated Firewall is installed - ufw
-      apt:
-        name: ufw
-        state: present
-        install_recommends: false
-      when: firewall_type == "ufw"
-    - name: 3.5.1.1 Ensure Uncomplicated Firewall is installed - iptables
-      apt:
-        name: iptables
-        state: present
-        install_recommends: false
-      when: firewall_type == "ufw" or firewall_type == "iptables"
+- name: 3.5.1.1 Ensure ufw is installed
+  apt:
+    name: ufw
+    state: present
+    install_recommends: false
   tags:
     - section3
     - level_1_server
@@ -483,18 +484,19 @@
     - 3.5.1.1
     - scored
   when: enable_firewall and 
-        debian10cis_rules_3_5_1_1
-# 3.5.2 Configure UncomplicatedFirewall
-# 3.5.2.1 Ensure ufw service is enabled
+        debian11cis_rules_3_5_1_1
+#TODO(moshe): 3.5.1.2 Ensure iptables-persistent is not installed with ufw
+
+# 3.5.1.3 Ensure ufw service is enabled
 # The ufw service must be enabled and running in order for ufw to protect the system
-- name: 3.5.2.1 Ensure ufw service is enabled
+- name: 3.5.1.3 Ensure ufw service is enabled
   block:
-    - name: 3.5.2.1 Ensure ufw service is enabled
+    - name: 3.5.1.3 Ensure ufw service is enabled
       service:
         name: ufw
         state: started
         enabled: true
-    - name: 3.5.2.1 Ensure ufw service is enabled - allow 22 before enable
+    - name: 3.5.1.3 Ensure ufw service is enabled - allow 22 before enable
       ufw:
         rule: "{{ item.rule }}"
         port: "{{ item.port }}"
@@ -505,53 +507,35 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.2.1
+    - 3.5.1.3
     - scored
   when: enable_firewall and
         firewall_type == "ufw" and 
-        debian10cis_rules_3_5_2_1
-# 3.5.2.2 Ensure default deny firewall policy
-# A default deny policy on connections ensures that any unconfigured network usage will be
-# rejected.
-# With a default accept policy the firewall will accept any packet that is not configured to be
-# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
-- name: 3.5.2.2 Ensure default deny firewall policy
-  shell: |
-    ufw default deny incoming
-    ufw default allow outgoing
-    ufw default deny routed
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.5.2.2
-    - scored
-  when: enable_firewall and
-        firewall_type == "ufw" and 
-        debian10cis_rules_3_5_2_2
-# 3.5.2.3 Ensure loopback traffic is configured
+        debian11cis_rules_3_5_1_3
+
+# 3.5.1.4 Ensure loopback traffic is configured
 # Loopback traffic is generated between processes on machine and is typically critical to
 # operation of the system. The loopback interface is the only place that loopback network
 # (127.0.0.0/8 for IPv4 and ::1/128 for IPv6) traffic should be seen, all other interfaces
 # should ignore traffic on this network as an anti-spoofing measure.
-- name: 3.5.2.3 Ensure loopback traffic is configured
+- name: 3.5.1.4 Ensure loopback traffic is configured
   block:
-    - name: 3.5.2.3 Ensure loopback traffic is configured - ingress lo allow in
+    - name: 3.5.1.4 Ensure loopback traffic is configured - ingress lo allow in
       ufw:
         rule: allow
         direction: in
         interface: lo
-    - name: 3.5.2.3 Ensure loopback traffic is configured - egress lo allow out
+    - name: 3.5.1.4 Ensure loopback traffic is configured - egress lo allow out
       ufw:
         rule: allow
         direction: out
         interface: lo
-    - name: 3.5.2.3 Ensure loopback traffic is configured  - ingress deny from lo network ipv4
+    - name: 3.5.1.4 Ensure loopback traffic is configured  - ingress deny from lo network ipv4
       ufw:
         rule: deny
         direction: in
         from: "127.0.0.0/8"
-    - name: 3.5.2.3 Ensure loopback traffic is configured  - ingress deny from lo network ipv6
+    - name: 3.5.1.4 Ensure loopback traffic is configured  - ingress deny from lo network ipv6
       ufw:
         rule: deny
         direction: in
@@ -561,30 +545,32 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.2.3
+    - 3.5.1.4
     - scored
   when: enable_firewall and
         firewall_type == "ufw" and 
-        debian10cis_rules_3_5_2_3
-# 3.5.2.4 Ensure outbound connections are configured
+        debian11cis_rules_3_5_2_3
+
+# 3.5.1.5 Ensure ufw outbound connections are configured
 # If rules are not in place for new outbound connections all packets will be dropped by the
 # default policy preventing network usage.
-- name: 3.5.2.4 Ensure outbound connections are configured
+- name: 3.5.1.5 Ensure ufw outbound connections are configured
   shell: |
     ufw allow out on all
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.2.4
+    - 3.5.1.5
     - not-scored
   when: enable_firewall and
         firewall_type == "ufw" and 
-        debian10cis_rules_3_5_2_4
-# 3.5.2.5 Ensure firewall rules exist for all open ports
+        debian11cis_rules_3_5_1_5
+
+# 3.5.1.6 Ensure ufw firewall rules exist for all open ports
 # Without a firewall rule configured for open ports default firewall policy will drop all
 # packets to these ports.
-- name: 3.5.2.5 Ensure firewall rules exist for all open ports - enable "{{ item.desc }}"
+- name: 3.5.1.6 Ensure firewall rules exist for all open ports - enable "{{ item.desc }}"
   ufw:
     rule: "{{ item.rule }}"
     port: "{{ item.port }}"
@@ -594,20 +580,42 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.2.5
+    - 3.5.1.6
     - scored
   when: enable_firewall and
         firewall_type == "ufw" and 
-        debian10cis_rules_3_5_2_5
-# 3.5.3 Configure nftables
-# 3.5.3.1 Ensure iptables are flushed
+        debian11cis_rules_3_5_1_6
+
+# 3.5.1.7 Ensure default deny firewall policy
+# A default deny policy on connections ensures that any unconfigured network usage will be
+# rejected.
+# With a default accept policy the firewall will accept any packet that is not configured to be
+# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
+- name: 3.5.1.7 Ensure default deny firewall policy
+  shell: |
+    ufw default deny incoming
+    ufw default allow outgoing
+    ufw default deny routed
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.1.7
+    - scored
+  when: enable_firewall and
+        firewall_type == "ufw" and 
+        debian11cis_rules_3_5_1_7
+
+# TODO(moshe): 3.5.2.2 Ensure ufw is uninstalled or disabled with nftables
+
+# 3.5.2.3 Ensure iptables are flushed with nftables
 # nftables is a replacement for iptables, ip6tables, ebtables and arptables
-- name: 3.5.3.1 Ensure iptables are flushed
+- name: 3.5.2.3 Ensure iptables are flushed with nftables
   block:
-    - name: 3.5.3.1 Ensure iptables are flushed - iptables
+    - name: 3.5.2.3 Ensure iptables are flushed with nftables - iptables
       shell: iptables -L
       check_mode: no
-    - name: 3.5.3.1 Ensure iptables are flushed - ip6tables
+    - name: 3.5.2.3 Ensure iptables are flushed with nftables - ip6tables
       shell: ip6tables -L
       when: IPv6_is_enabled
       check_mode: no
@@ -615,127 +623,133 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.1
+    - 3.5.2.3
     - not-scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_1
-# 3.5.3.2 Ensure a table exists
+        debian11cis_rules_3_5_2_3
+
+# 3.5.2.4 Ensure a nftables table exists
 # Tables hold chains. Each table only has one address family and only applies to packets of
 # this family. Tables can have one of five families.
-- name: 3.5.3.2  Ensure a table exists
+- name: 3.5.2.4  Ensure a nftables table exists
   block:
-    - name: 3.5.3.2 Ensure a table exists - flush existing table
+    - name: 3.5.2.4 Ensure a nftables table exists - flush existing table
       shell: nft flush ruleset
-    - name: 3.5.3.2 Ensure a table exists - create new table
+    - name: 3.5.2.4 Ensure a nftables table exists - create new table
       shell: nft create table inet filter
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.2
+    - 3.5.2.4
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_2
-# 3.5.3.3 Ensure base chains exist
+        debian11cis_rules_3_5_2_4
+
+# 3.5.2.5 Ensure nftables base chains exist
 # Chains are containers for rules. They exist in two kinds, base chains and regular chains. A
 # base chain is an entry point for packets from the networking stack, a regular chain may be
 # used as jump target and is used for better rule organization.
-- name: 3.5.3.3 Ensure base chains exist
+- name: 3.5.2.5 Ensure nftables base chains exist
   block:
-    - name: 3.5.3.3 Ensure base chains exist - chain INPUT
+    - name: 3.5.2.5 Ensure nftables base chains exist - chain INPUT
       shell: nft create chain inet filter INPUT { type filter hook input priority 0 \; }
-    - name: 3.5.3.3 Ensure base chains exist - chain FORWARD
+    - name: 3.5.2.5 Ensure nftables base chains exist - chain FORWARD
       shell: nft create chain inet filter FORWARD { type filter hook forward priority 0 \; }
-    - name: 3.5.3.3 Ensure base chains exist - chain OUTPUT
+    - name: 3.5.2.5 Ensure nftables base chains exist - chain OUTPUT
       shell: nft create chain inet filter OUTPUT { type filter hook output priority 0 \; }
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.3
+    - 3.5.2.5
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_3
-# 3.5.3.4 Ensure loopback traffic is configured
+        debian11cis_rules_3_5_2_5
+
+# 3.5.2.6 Ensure nftables loopback traffic is configured
 # Configure the loopback interface to accept traffic. Configure all other interfaces to deny
 # traffic to the loopback network
-- name: 3.5.3.4 Ensure loopback traffic is configured
+- name: 3.5.2.6 Ensure nftables loopback traffic is configured
   block:
-    - name: 3.5.3.4 Ensure loopback traffic is configured - accept
+    - name: 3.5.2.6 Ensure nftables loopback traffic is configured - accept
       shell: nft add rule inet filter INPUT iif lo accept
-    - name: 3.5.3.4 Ensure loopback traffic is configured - drop
+    - name: 3.5.2.6 Ensure nftables loopback traffic is configured - drop
       shell: nft add rule inet filter INPUT ip saddr 127.0.0.0/8 counter drop
-    - name: 3.5.3.4 Ensure loopback traffic is configured - ipv6 drop
+    - name: 3.5.2.6 Ensure nftables loopback traffic is configured - ipv6 drop
       shell: nft add rule inet filter INPUT ip6 saddr ::1 counter drop
       when: IPv6_is_enabled
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.4
+    - 3.5.2.6
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_4
-# 3.5.3.5 Ensure outbound and established connections are configured
+        debian11cis_rules_3_5_2_6
+
+# 3.5.2.7 Ensure nftables outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
-- name: 3.5.3.5 Ensure outbound and established connections are configured
+- name: 3.5.2.7 Ensure nftables outbound and established connections are configured
   block:
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - input tcp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - input tcp
       shell: nft add rule inet filter INPUT ip protocol tcp ct state established accept
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - input udp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - input udp
       shell: nft add rule inet filter INPUT ip protocol udp ct state established accept
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - input icmp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - input icmp
       shell: nft add rule inet filter INPUT ip protocol icmp ct state established accept
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - output tcp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - output tcp
       shell: nft add rule inet filter OUTPUT ip protocol tcp ct state new,related,established accept
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - output udp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - output udp
       shell: nft add rule inet filter OUTPUT ip protocol udp ct state new,related,established accept
-    - name: 3.5.3.5 Ensure outbound and established connections are configured - output icmp
+    - name: 3.5.2.7 Ensure nftables outbound and established connections are configured - output icmp
       shell: nft add rule inet filter OUTPUT ip protocol icmp ct state new,related,established accept
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.5
+    - 3.5.2.7
     - not-scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_5
-#  3.5.3.6 Ensure default deny firewall policy
+        debian11cis_rules_3_5_2_7
+
+#  3.5.2.8 Ensure nftables default deny firewall policy
 # Base chain policy is the default verdict that will be applied to packets reaching the end of
 # the chain.
-- name: 3.5.3.6 Ensure default deny firewall policy
+- name: 3.5.2.8 Ensure nftables default deny firewall policy
   block:
-    # - name: 3.5.3.6 Ensure default deny firewall policy - enable ssh
+    # - name: 3.5.2.8 Ensure nftables default deny firewall policy - enable ssh
     #   shell: nft chain inet filter INPUT { tcp dport ssh accept \;}
-    # - name: 3.5.3.6 Ensure default deny firewall policy - enable ping
+    # - name: 3.5.2.8 Ensure nftables default deny firewall policy - enable ping
     #   shell: nft chain inet filter INPUT { ip protocol icmp accept \;}
-    - name: 3.5.3.6 Ensure default deny firewall policy - enable "{{ item.desc }}"
+    - name: 3.5.2.8 Ensure nftables default deny firewall policy - enable "{{ item.desc }}"
       shell: nft add rule inet filter INPUT "{{ item.rule }}"
       with_items: "{{ list_of_rules_to_allow }}"
-    - name: 3.5.3.6 Ensure default deny firewall policy - input
+    - name: 3.5.2.8 Ensure nftables default deny firewall policy - input
       shell: nft chain inet filter INPUT { policy drop \; }
-    - name: 3.5.3.6 Ensure default deny firewall policy - forward
+    - name: 3.5.2.8 Ensure nftables default deny firewall policy - forward
       shell: nft chain inet filter FORWARD { policy drop \; }
-    - name: 3.5.3.6 Ensure default deny firewall policy - output
+    - name: 3.5.2.8 Ensure nftables default deny firewall policy - output
       shell: nft chain inet filter OUTPUT { policy drop \; }
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.6
+    - 3.5.2.8
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_6
-# 3.5.3.7 Ensure nftables service is enabled
+        debian11cis_rules_3_5_2_8
+
+# 3.5.2.9 Ensure nftables service is enabled
 # The nftables service allows for the loading of nftables rulesets during boot, or starting
 # on the nftables service
-- name: 3.5.3.7 Ensure nftables service is enabled
+- name: 3.5.2.9 Ensure nftables service is enabled
   service:
     name: nftables
     state: started
@@ -744,35 +758,81 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.7
+    - 3.5.2.9
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_7
-# 3.5.3.8 Ensure nftables rules are permanent
+        debian11cis_rules_3_5_2_9
+
+# 3.5.2.10 Ensure nftables rules are permanent
 # nftables is a subsystem of the Linux kernel providing filtering and classification of network
 # packets/datagrams/frames.
 # The nftables service reads the /etc/nftables.conf file for a nftables file or files to include
 # in the nftables ruleset.
 # A nftables ruleset containing the input, forward, and output base chains allow network
 # traffic to be filtered.
-- name: 3.5.3.8 Ensure nftables rules are permanent
+- name: 3.5.2.10 Ensure nftables rules are permanent
   shell: nft list ruleset > /etc/nftables.conf
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.3.8
+    - 3.5.2.10
     - scored
   when: enable_firewall and
         firewall_type == "nftables" and 
-        debian10cis_rules_3_5_3_8
-# 3.5.4 Configure iptables
-# 3.5.4.1 Configure IPv4 iptables
-# 3.5.4.1.1 Ensure default deny firewall policy
+        debian11cis_rules_3_5_2_10
+
+# 3.5.3.1.1 Ensure iptables packages are installed
+- name: 3.5.3.1.1 Ensure iptables packages are installed
+  apt:
+    name: ufw
+    state: present
+    install_recommends: false
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.3.1.1
+    - scored
+  when: enable_firewall and
+    firewall_type == "iptables" and
+    debian11cis_rules_3_5_3_1_1
+
+# 3.5.3.1.2 Ensure nftables is not installed with iptables
+- name: 3.5.3.1.2 Ensure nftables is not installed with iptables
+  apt:
+    name: nftables
+    state: absent
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.3.1.2
+    - scored
+  when: enable_firewall and
+    firewall_type == "iptables" and
+    debian11cis_rules_3_5_3_1_2
+
+# 3.5.3.1.3 Ensure ufw is uninstalled or disabled with iptables
+- name: 3.5.3.1.3 Ensure ufw is uninstalled or disabled with iptables
+  apt:
+    name: nftables
+    state: absent
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.3.1.3
+    - scored
+  when: enable_firewall and
+    firewall_type == "iptables" and
+    debian11cis_rules_3_5_3_1_3
+
+# 3.5.3.2.1 Ensure iptables default deny firewall policy
 # With a default accept policy the firewall will accept any packet that is not configured to be
 # denied. It is easier to white list acceptable usage than to black list unacceptable usage.
-- name: 3.5.4.1.1 Ensure default deny firewall policy
+- name: 3.5.3.2.1 Ensure iptables default deny firewall policy
   iptables:
     chain: "{{ item }}"
     policy: DROP
@@ -784,29 +844,30 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.1.1
+    - 3.5.3.2.1
     - scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_1_1
-# 3.5.4.1.2 Ensure loopback traffic is configured
+        debian11cis_rules_3_5_3_2_1
+
+# 3.5.3.2.2 Ensure iptables loopback traffic is configured
 # Loopback traffic is generated between processes on machine and is typically critical to
 # operation of the system. The loopback interface is the only place that loopback network
 # (127.0.0.0/8) traffic should be seen, all other interfaces should ignore traffic on this
 # network as an anti-spoofing measure.
-- name: 3.5.4.1.2 Ensure loopback traffic is configured
+- name: 3.5.3.2.2 Ensure iptables loopback traffic is configured
   block:
-    - name: 3.5.4.1.2 Ensure loopback traffic is configured - INPUT lo
+    - name: 3.5.3.2.2 Ensure iptables loopback traffic is configured - INPUT lo
       iptables:
         chain: INPUT
         in_interface: "lo"
         jump: ACCEPT
-    - name: 3.5.4.1.2 Ensure loopback traffic is configured - OUTPUT lo
+    - name: 3.5.3.2.2 Ensure iptables loopback traffic is configured - OUTPUT lo
       iptables:
         chain: OUTPUT
         out_interface: "lo"
         jump: ACCEPT
-    - name: 3.5.4.1.2 Ensure loopback traffic is configured - INPUT DROP
+    - name: 3.5.3.2.2 Ensure iptables loopback traffic is configured - INPUT DROP
       iptables:
         chain: INPUT
         source: 127.0.0.0/8
@@ -815,52 +876,53 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.1.2
+    - 3.5.3.2.2
     - scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_1_2
-# 3.5.4.1.3 Ensure outbound and established connections are configured
+        debian11cis_rules_3_5_3_2_2
+
+# 3.5.3.2.3 Ensure iptables outbound and established connections are configured
 # If rules are not in place for new outbound, and established connections all packets will be
 # dropped by the default policy preventing network usage.
-- name: 3.5.4.1.3 Ensure outbound and established connections are configured
+- name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured
   block:
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - OUTPUT tcp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - OUTPUT tcp
       iptables:
         chain: OUTPUT
         protocol: tcp
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - OUTPUT udp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - OUTPUT udp
       iptables:
         chain: OUTPUT
         protocol: udp
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - OUTPUT icmp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - OUTPUT icmp
       iptables:
         chain: OUTPUT
         protocol: icmp
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - INPUT tcp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - INPUT tcp
       iptables:
         chain: INPUT
         protocol: tcp
         match: state
         ctstate: ESTABLISHED
         jump: ACCEPT
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - INPUT udp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - INPUT udp
       iptables:
         chain: INPUT
         protocol: udp
         match: state
         ctstate: ESTABLISHED
         jump: ACCEPT
-    - name: 3.5.4.1.3 Ensure outbound and established connections are configured - INPUT icmp
+    - name: 3.5.3.2.3 Ensure iptables outbound and established connections are configured - INPUT icmp
       iptables:
         chain: INPUT
         protocol: icmp
@@ -871,15 +933,16 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.1.3
+    - 3.5.3.2.3
     - not-scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_1_3
-# 3.5.4.1.4 Ensure firewall rules exist for all open ports
+        debian11cis_rules_3_5_3_2_3
+
+# 3.5.3.2.4 Ensure iptables firewall rules exist for all open ports
 # Without a firewall rule configured for open ports default firewall policy will drop all
 # packets to these ports.
-- name: 3.5.4.1.4 Ensure firewall rules exist for all open ports - enable "{{ item.desc }}"
+- name: 3.5.3.2.4 Ensure iptables firewall rules exist for all open ports - enable "{{ item.desc }}"
   iptables:
     chain: INPUT
     protocol: "{{ item.proto }}"
@@ -892,16 +955,16 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.1.4
+    - 3.5.3.2.4
     - scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_1_4
-# 3.5.4.2 Configure IPv6 ip6tables
-# 3.5.4.2.1 Ensure IPv6 default deny firewall policy
+        debian11cis_rules_3_5_3_2_4
+
+# 3.5.3.3.1 Ensure ip6tables default deny firewall policy
 # With a default accept policy the firewall will accept any packet that is not configured to be
 # denied. It is easier to white list acceptable usage than to black list unacceptable usage.
-- name: 3.5.4.2.1 Ensure IPv6 default deny firewall policy
+- name: 3.5.3.3.1 Ensure ip6tables default deny firewall policy
   iptables:
     chain: "{{ item }}"
     ip_version: ipv6
@@ -914,32 +977,33 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.2.1
+    - 3.5.3.3.1
     - scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_2_1 and
+        debian11cis_rules_3_5_3_3_1 and
         IPv6_is_enabled
-# 3.5.4.2.2 Ensure IPv6 loopback traffic is configured
+
+# 3.5.3.3.2 Ensure ip6tables loopback traffic is configured
 # Loopback traffic is generated between processes on machine and is typically critical to
 # operation of the system. The loopback interface is the only place that loopback network
 # (::1) traffic should be seen, all other interfaces should ignore traffic on this network as an
 # anti-spoofing measure.
-- name: 3.5.4.2.2 Ensure IPv6 loopback traffic is configured
+- name: 3.5.3.3.2 Ensure ip6tables loopback traffic is configured
   block:
-    - name: 3.5.4.2.2 Ensure IPv6 loopback traffic is configured - INPUT lo
+    - name: 3.5.3.3.2 Ensure ip6tables loopback traffic is configured - INPUT lo
       iptables:
         chain: INPUT
         ip_version: ipv6
         in_interface: "lo"
         jump: ACCEPT
-    - name: 3.5.4.2.2 Ensure IPv6 loopback traffic is configured - OUTPUT lo
+    - name: 3.5.3.3.2 Ensure ip6tables loopback traffic is configured - OUTPUT lo
       iptables:
         chain: OUTPUT
         ip_version: ipv6
         out_interface: "lo"
         jump: ACCEPT
-    - name: 3.5.4.2.2 Ensure IPv6 loopback traffic is configured - INPUT DROP
+    - name: 3.5.3.3.2 Ensure ip6tables loopback traffic is configured - INPUT DROP
       iptables:
         chain: INPUT
         ip_version: ipv6
@@ -949,18 +1013,19 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.2.2
+    - 3.5.3.3.2
     - scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_2_2 and
+        debian11cis_rules_3_5_3_3_2 and
         IPv6_is_enabled
-# 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured
+
+# 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured
 # If rules are not in place for new outbound, and established connections all packets will be
 # dropped by the default policy preventing network usage.
-- name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured
+- name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured
   block:
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - OUTPUT tcp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - OUTPUT tcp
       iptables:
         chain: OUTPUT
         ip_version: ipv6
@@ -968,7 +1033,7 @@
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - OUTPUT udp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - OUTPUT udp
       iptables:
         chain: OUTPUT
         ip_version: ipv6
@@ -976,7 +1041,7 @@
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - OUTPUT icmp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - OUTPUT icmp
       iptables:
         chain: OUTPUT
         ip_version: ipv6
@@ -984,7 +1049,7 @@
         match: state
         ctstate: ESTABLISHED,NEW
         jump: ACCEPT
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - INPUT tcp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - INPUT tcp
       iptables:
         chain: INPUT
         ip_version: ipv6
@@ -992,7 +1057,7 @@
         match: state
         ctstate: ESTABLISHED
         jump: ACCEPT
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - INPUT udp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - INPUT udp
       iptables:
         chain: INPUT
         ip_version: ipv6
@@ -1000,7 +1065,7 @@
         match: state
         ctstate: ESTABLISHED
         jump: ACCEPT
-    - name: 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured - INPUT icmp
+    - name: 3.5.3.3.3 Ensure ip6tables outbound and established connections are configured - INPUT icmp
       iptables:
         chain: INPUT
         ip_version: ipv6
@@ -1012,16 +1077,17 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.2.3
+    - 3.5.3.3.3
     - not-scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_2_3 and
+        debian11cis_rules_3_5_3_3_3 and
         IPv6_is_enabled
-# 3.5.4.2.4 Ensure IPv6 firewall rules exist for all open ports
+
+# 3.5.3.3.4 Ensure ip6tables firewall rules exist for all open ports
 # Without a firewall rule configured for open ports default firewall policy will drop all
 # packets to these ports.
-- name: 3.5.4.2.4 Ensure IPv6 firewall rules exist for all open ports - enable "{{ item.desc }}"
+- name: 3.5.3.3.4 Ensure ip6tables firewall rules exist for all open ports - enable "{{ item.desc }}"
   iptables:
     chain: INPUT
     ip_version: ipv6
@@ -1035,9 +1101,9 @@
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.5.4.2.4
+    - 3.5.3.3.4
     - not-scored
   when: enable_firewall and
         firewall_type == "iptables" and
-        debian10cis_rules_3_5_4_2_4 and
+        debian11cis_rules_3_5_3_3_4 and
         IPv6_is_enabled
