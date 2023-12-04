@@ -13,11 +13,9 @@
         name: ntp
         state: present
     - name: 2.1.1.1 Ensure a single time synchronization daemon is in use - mask systemd-timesyncd
-      systemd:
+      apt:
         name: systemd-timesyncd
-        enabled: false
-        masked: true
-        state: stopped
+        state: absent
     - name: 2.1.1.1 Ensure a single time synchronization daemon is in use - purge chrony
       apt:
         name: chrony
