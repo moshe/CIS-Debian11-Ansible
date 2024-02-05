@@ -3,7 +3,7 @@
 
 
 # Section 3 Settings
-IPv6_is_enabled: no
+IPv6_is_enabled: true
 enable_firewall: yes
 firewall_type: nftables # Valid values are: ufw, nftables, iptables
 # ufw example
